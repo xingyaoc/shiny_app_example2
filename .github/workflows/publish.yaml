@@ -1,0 +1,26 @@
+name: publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish-shiny_app_example2:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: xingyaoc
+        password:   ${{ secrets.PAT }} 
+
+    - name: Build the shiny_app_example2 Docker image
+      run: |
+        docker build . --tag ghcr.io/xingyaoc/shiny_app_example2:latest
+        docker run ghcr.io/xingyaoc/shiny_app_example2:latest
+        docker push ghcr.io/xingyaoc/shiny_app_example2:latest
